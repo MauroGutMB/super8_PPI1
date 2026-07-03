@@ -25,11 +25,11 @@ foreach ($nomes as $i => $nome) {
     if ($nome === '') {
         redirecionar('participantes', erro: 'O nome do jogador ' . ($i + 1) . ' está vazio.');
     }
-    if (mb_strlen($nome) > 60) {
-        redirecionar('participantes', erro: 'O nome do jogador ' . ($i + 1) . ' excede 60 caracteres.');
+    if (mb_strlen($nome) > LIMITE_NOME) {
+        redirecionar('participantes', erro: 'O nome do jogador ' . ($i + 1) . ' excede ' . LIMITE_NOME . ' caracteres.');
     }
-    if (mb_strlen($apelido) > 30) {
-        redirecionar('participantes', erro: 'O apelido do jogador ' . ($i + 1) . ' excede 30 caracteres.');
+    if (mb_strlen($apelido) > LIMITE_APELIDO) {
+        redirecionar('participantes', erro: 'O apelido do jogador ' . ($i + 1) . ' excede ' . LIMITE_APELIDO . ' caracteres.');
     }
     $participantes[] = [
         'id'      => $i + 1,
@@ -43,13 +43,11 @@ if (count(array_unique($nomesNormalizados)) !== 8) {
     redirecionar('participantes', erro: 'Há nomes repetidos: cada participante deve ter um nome diferente.');
 }
 
-// Apelido é o que aparece nas rodadas e tabelas: se preenchido, não pode repetir.
-$apelidosPreenchidos = array_filter(
-    array_map(fn($p) => mb_strtolower($p['apelido']), $participantes),
-    fn($a) => $a !== ''
-);
-if (count($apelidosPreenchidos) !== count(array_unique($apelidosPreenchidos))) {
-    redirecionar('participantes', erro: 'Há apelidos repetidos: cada apelido deve ser único (ou deixe em branco).');
+// O rótulo exibido nas rodadas e tabelas (apelido ou, sem ele, o nome) deve ser
+// único — cobre apelido repetido e também apelido igual ao rótulo de outro jogador.
+$rotulos = array_map(fn($p) => mb_strtolower(nome_exibicao($p)), $participantes);
+if (count(array_unique($rotulos)) !== 8) {
+    redirecionar('participantes', erro: 'Há apelidos repetidos ou iguais ao nome de outro jogador: cada um deve aparecer com um rótulo diferente.');
 }
 
 if (!gravar_json('participantes.json', ['participantes' => $participantes])) {

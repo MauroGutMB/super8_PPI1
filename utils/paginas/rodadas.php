@@ -12,10 +12,7 @@ if ($participantes === null || $torneio === null) {
     exit;
 }
 
-$nomes = [];
-foreach ($participantes as $p) {
-    $nomes[$p['id']] = ($p['apelido'] ?? '') !== '' ? $p['apelido'] : $p['nome'];
-}
+$nomes = mapa_nomes($participantes);
 
 function nome_dupla(array $dupla, array $nomes): string
 {

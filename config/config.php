@@ -11,6 +11,11 @@ const TOTAL_RODADAS  = 7; // rodadas do Super 8
 const PONTOS_VITORIA = 2;
 const PONTOS_EMPATE  = 1;
 
+// Limites de tamanho dos campos do cadastro (usados no maxlength do
+// formulário e na validação do servidor, para não dessincronizarem)
+const LIMITE_NOME    = 60;
+const LIMITE_APELIDO = 30;
+
 require_once BASE_DIR . '/utils/json_helper.php';
 require_once BASE_DIR . '/utils/sorteio.php';
 require_once BASE_DIR . '/utils/pontuacao.php';

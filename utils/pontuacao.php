@@ -104,10 +104,7 @@ function calcular_classificacao(array $participantes, array $torneio): array
 /** Classificação por dupla (apenas formato de duplas fixas). */
 function calcular_classificacao_duplas(array $participantes, array $torneio): array
 {
-    $nomes = [];
-    foreach ($participantes as $p) {
-        $nomes[$p['id']] = ($p['apelido'] ?? '') !== '' ? $p['apelido'] : $p['nome'];
-    }
+    $nomes = mapa_nomes($participantes);
 
     $tabela = [];
     foreach ($torneio['duplas_fixas'] as $i => $dupla) {

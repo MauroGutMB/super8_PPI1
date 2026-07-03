@@ -103,7 +103,7 @@ function grafico_evolucao(array $participantes, array $torneio): void
     <ul class="legenda">
         <?php $i = 0; foreach ($participantes as $p): ?>
             <li><span class="cor" style="background: <?= $cores[$i % count($cores)] ?>"></span>
-                <?= e(($p['apelido'] ?? '') !== '' ? $p['apelido'] : $p['nome']) ?></li>
+                <?= e(nome_exibicao($p)) ?></li>
         <?php $i++; endforeach; ?>
     </ul>
     <?php
@@ -124,6 +124,7 @@ function grafico_evolucao(array $participantes, array $torneio): void
     <button type="button" class="botao botao-mini" onclick="window.print()">
         🖨️ Imprimir / exportar
     </button>
+    <noscript>Para imprimir ou exportar, use <kbd>Ctrl</kbd>+<kbd>P</kbd>.</noscript>
 </p>
 
 <?php if ($torneio['formato'] === 'fixas'): ?>

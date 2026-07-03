@@ -37,7 +37,30 @@ function carregar_participantes(): ?array
 {
     $dados = ler_json('participantes.json');
     $lista = $dados['participantes'] ?? null;
-    return (is_array($lista) && count($lista) === 8) ? $lista : null;
+    if (!is_array($lista) || count($lista) !== 8) {
+        return null;
+    }
+    foreach ($lista as &$p) {
+        $p['apelido'] ??= ''; // JSON antigo/editado à mão pode não ter a chave
+    }
+    unset($p);
+    return $lista;
+}
+
+/** Rótulo exibido do participante: apelido quando preenchido, senão o nome. */
+function nome_exibicao(array $p): string
+{
+    return ($p['apelido'] ?? '') !== '' ? $p['apelido'] : $p['nome'];
+}
+
+/** Mapa id do jogador => rótulo exibido, usado nas rodadas e na classificação. */
+function mapa_nomes(array $participantes): array
+{
+    $nomes = [];
+    foreach ($participantes as $p) {
+        $nomes[$p['id']] = nome_exibicao($p);
+    }
+    return $nomes;
 }
 
 /** Retorna o torneio (formato + rodadas) ou null se ainda não gerado. */

@@ -20,12 +20,12 @@ if ($torneio !== null): ?>
                 <legend>Jogador <?= $i + 1 ?></legend>
                 <label>
                     Nome completo *
-                    <input type="text" name="nome[]" required maxlength="60"
+                    <input type="text" name="nome[]" required maxlength="<?= LIMITE_NOME ?>"
                            value="<?= e($participantes[$i]['nome'] ?? '') ?>">
                 </label>
                 <label>
                     Apelido (opcional)
-                    <input type="text" name="apelido[]" maxlength="30"
+                    <input type="text" name="apelido[]" maxlength="<?= LIMITE_APELIDO ?>"
                            value="<?= e($participantes[$i]['apelido'] ?? '') ?>">
                 </label>
             </fieldset>

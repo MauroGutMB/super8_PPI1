@@ -50,11 +50,15 @@ if ($participantes === null): ?>
         </fieldset>
 
         <fieldset class="secao-duplas">
-            <legend>Formação das 4 duplas</legend>
+            <legend>Formação das 4 duplas (usada apenas no formato de duplas fixas)</legend>
             <label class="opcao-sorteio">
-                <input type="checkbox" name="sortear_duplas" value="1" checked>
+                <?php /* Ao regerar um torneio que já tem duplas montadas, o sorteio começa
+                         desmarcado para o envio padrão preservar as duplas atuais. */ ?>
+                <input type="checkbox" name="sortear_duplas" value="1"
+                       <?= $duplasAtuais === null ? 'checked' : '' ?>>
                 Sortear as duplas automaticamente
             </label>
+            <p>Desmarque o sorteio para escolher os pares manualmente.</p>
             <div class="escolha-duplas">
                 <p>Escolha os pares (cada jogador em exatamente uma dupla):</p>
                 <?php for ($d = 0; $d < 4; $d++): ?>
