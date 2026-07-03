@@ -359,6 +359,12 @@ main h3 {
     height: 1rem;
 }
 
+/* Sem JavaScript: a seção de duplas só aparece no formato de duplas fixas,
+   e os selects manuais somem enquanto o sorteio automático está marcado.
+   Em navegador sem :has() tudo fica visível — o servidor valida de qualquer forma. */
+.formulario:has(input[name="formato"][value="rotativas"]:checked) .secao-duplas { display: none; }
+.secao-duplas:has(input[name="sortear_duplas"]:checked) .escolha-duplas { display: none; }
+
 /* === 10. Botões === */
 .botao {
     display: inline-flex;
@@ -607,6 +613,8 @@ main h3 {
 
 .tabela-classificacao .celula-nome small { font-weight: 400; color: var(--texto-suave); }
 .tabela-classificacao .celula-pontos { font-weight: 800; color: var(--mar); font-size: 1rem; }
+
+.acoes-classificacao { text-align: right; margin-bottom: var(--sp-3); }
 .tabela-classificacao .lider { background: #fff9e6; }
 .tabela-classificacao .lider .celula-nome::after { content: " 🏆"; }
 
@@ -691,7 +699,7 @@ main h3 {
 /* === 19. Impressão === */
 @media print {
     .skip-link, .topo nav, .rodape,
-    .form-reiniciar, .botao { display: none !important; }
+    .acoes-classificacao, .form-reiniciar, .botao { display: none !important; }
     body { background: #fff; }
     .msg { border: 1px solid #ccc; }
     .topo { box-shadow: none; }

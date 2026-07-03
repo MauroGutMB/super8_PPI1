@@ -103,7 +103,7 @@ function grafico_evolucao(array $participantes, array $torneio): void
     <ul class="legenda">
         <?php $i = 0; foreach ($participantes as $p): ?>
             <li><span class="cor" style="background: <?= $cores[$i % count($cores)] ?>"></span>
-                <?= e($p['apelido'] !== '' ? $p['apelido'] : $p['nome']) ?></li>
+                <?= e(($p['apelido'] ?? '') !== '' ? $p['apelido'] : $p['nome']) ?></li>
         <?php $i++; endforeach; ?>
     </ul>
     <?php
@@ -117,8 +117,13 @@ function grafico_evolucao(array $participantes, array $torneio): void
     <?php else: ?>
         Tabela atualizada automaticamente a cada 20 segundos
         (rodada atual: <?= rodada_atual($torneio) ?> de <?= count($torneio['rodadas']) ?>).
-        Para imprimir ou exportar, use <kbd>Ctrl</kbd>+<kbd>P</kbd>.
     <?php endif; ?>
+</p>
+
+<p class="acoes-classificacao">
+    <button type="button" class="botao botao-mini" onclick="window.print()">
+        🖨️ Imprimir / exportar
+    </button>
 </p>
 
 <?php if ($torneio['formato'] === 'fixas'): ?>

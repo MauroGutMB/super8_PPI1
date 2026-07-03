@@ -14,7 +14,7 @@ if ($participantes === null || $torneio === null) {
 
 $nomes = [];
 foreach ($participantes as $p) {
-    $nomes[$p['id']] = $p['apelido'] !== '' ? $p['apelido'] : $p['nome'];
+    $nomes[$p['id']] = ($p['apelido'] ?? '') !== '' ? $p['apelido'] : $p['nome'];
 }
 
 function nome_dupla(array $dupla, array $nomes): string

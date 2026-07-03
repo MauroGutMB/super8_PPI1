@@ -4,8 +4,7 @@ Sistema web para organizar um torneio **Super 8** de beach tennis: 8 participant
 7 rodadas no formato todos contra todos, lançamento de placares e classificação em
 tempo real. Desenvolvido para a disciplina **Programação para Internet I**.
 
-**Tecnologias:** PHP · HTML · CSS · JSON (100% PHP no servidor, sem JavaScript e
-sem banco de dados — toda a persistência é feita em arquivos JSON na pasta `data/`).
+**Tecnologias:** PHP · HTML · CSS · JSON.
 
 ## ▶️ Como rodar localmente
 
@@ -31,8 +30,8 @@ de escrita (em Linux: `chmod 775 data`).
    libera quando a atual estiver completa. Placares já lançados podem ser **editados**
    (a classificação é recalculada automaticamente).
 4. **Classificação** — tabela ordenada (recarregada automaticamente enquanto o
-   torneio está em andamento) e gráfico de evolução de pontos. Para imprimir ou
-   exportar, use `Ctrl+P` (há CSS de impressão dedicado).
+   torneio está em andamento), gráfico de evolução de pontos e botão de
+   imprimir/exportar (com CSS de impressão dedicado).
 5. **Reiniciar** — o menu inicial leva a uma página de confirmação que zera tudo
    para um novo evento.
 
@@ -97,7 +96,6 @@ super8/
 └── data/                          → participantes.json e rodadas.json (gerados em uso)
 ```
 
-**Divisão de responsabilidades:** o sistema é **100% PHP** — não há JavaScript.
 Toda requisição passa pelo `index.php`: páginas (`?pagina=...`) apenas exibem;
 ações (`?acao=...`) validam o POST, gravam os JSONs e redirecionam com mensagem
 de sucesso ou erro (padrão *POST → redirect → GET*). Confirmações destrutivas
@@ -131,12 +129,3 @@ estrutura igual para os dois formatos):
 ```
 
 No formato de duplas fixas há ainda a chave `"duplas_fixas": [[1,2],[3,4],...]`.
-
-## 🚀 Bônus implementados
-
-- 🎲 Sorteio que **garante** parceiro inédito em todas as rodadas (rotativas)
-- 📊 Gráfico SVG com a evolução da pontuação rodada a rodada (gerado em PHP)
-- 🖨️ CSS de impressão dedicado para exportar a classificação (`Ctrl+P`)
-- 📱 Layout mobile-first para uso na quadra
-- 🔄 Edição de placar já lançado com recálculo automático
-- ⏱️ Barra de progresso e selos de rodada (em andamento / concluída / aguardando)

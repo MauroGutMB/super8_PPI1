@@ -38,14 +38,35 @@ if ($formato === 'rotativas') {
             if (count($par) !== 2) {
                 redirecionar('configuracao', erro: 'A dupla ' . ($d + 1) . ' está incompleta.');
             }
+            if ($par[0] === $par[1]) {
+                redirecionar('configuracao', erro: 'A dupla ' . ($d + 1) . ' tem o mesmo jogador nas duas posições.');
+            }
             $duplas[] = $par;
         }
+
+        $nomes  = array_column($participantes, 'nome', 'id');
+        $vistos = []; // id do jogador => número da dupla em que já apareceu
+        foreach ($duplas as $d => $par) {
+            foreach ($par as $id) {
+                if (isset($vistos[$id])) {
+                    redirecionar('configuracao', erro: sprintf(
+                        'O jogador %s aparece em mais de uma dupla (duplas %d e %d). Cada jogador entra em exatamente uma dupla.',
+                        $nomes[$id] ?? "nº $id",
+                        $vistos[$id],
+                        $d + 1
+                    ));
+                }
+                $vistos[$id] = $d + 1;
+            }
+        }
+
+        // Salvaguarda: só ids de participantes cadastrados
         $todos = array_merge(...$duplas);
         sort($todos);
         $esperado = $ids;
         sort($esperado);
         if ($todos !== $esperado) {
-            redirecionar('configuracao', erro: 'Cada jogador deve aparecer em exatamente uma dupla. Revise a escolha.');
+            redirecionar('configuracao', erro: 'Seleção de duplas inválida: use apenas os 8 participantes cadastrados.');
         }
     }
     $dados = [

@@ -25,6 +25,12 @@ foreach ($nomes as $i => $nome) {
     if ($nome === '') {
         redirecionar('participantes', erro: 'O nome do jogador ' . ($i + 1) . ' está vazio.');
     }
+    if (mb_strlen($nome) > 60) {
+        redirecionar('participantes', erro: 'O nome do jogador ' . ($i + 1) . ' excede 60 caracteres.');
+    }
+    if (mb_strlen($apelido) > 30) {
+        redirecionar('participantes', erro: 'O apelido do jogador ' . ($i + 1) . ' excede 30 caracteres.');
+    }
     $participantes[] = [
         'id'      => $i + 1,
         'nome'    => $nome,
@@ -35,6 +41,15 @@ foreach ($nomes as $i => $nome) {
 $nomesNormalizados = array_map(fn($p) => mb_strtolower($p['nome']), $participantes);
 if (count(array_unique($nomesNormalizados)) !== 8) {
     redirecionar('participantes', erro: 'Há nomes repetidos: cada participante deve ter um nome diferente.');
+}
+
+// Apelido é o que aparece nas rodadas e tabelas: se preenchido, não pode repetir.
+$apelidosPreenchidos = array_filter(
+    array_map(fn($p) => mb_strtolower($p['apelido']), $participantes),
+    fn($a) => $a !== ''
+);
+if (count($apelidosPreenchidos) !== count(array_unique($apelidosPreenchidos))) {
+    redirecionar('participantes', erro: 'Há apelidos repetidos: cada apelido deve ser único (ou deixe em branco).');
 }
 
 if (!gravar_json('participantes.json', ['participantes' => $participantes])) {

@@ -1,7 +1,7 @@
 <?php
 /**
  * Configurações centrais do sistema e carregamento dos utilitários.
- * Todo request passa por aqui (via index.php) antes de qualquer página ou ação.
+ * request passa por aqui (via index.php) antes de qualquer página ou ação.
  */
 
 define('BASE_DIR', dirname(__DIR__));
