@@ -1,17 +1,14 @@
 <?php
-require_once __DIR__ . '/../utils/json_helper.php';
-require_once __DIR__ . '/../utils/layout.php';
-
 $participantes = carregar_participantes();
 $torneio       = carregar_torneio();
 
-cabecalho('Formato do Torneio', '..');
+cabecalho('Formato do Torneio');
 mensagens_flash();
 
 if ($participantes === null): ?>
     <p class="msg msg-erro">
         Antes de configurar o torneio é preciso
-        <a href="../participantes/cadastro.php">cadastrar os 8 participantes</a>.
+        <a href="<?= e(url_para('participantes')) ?>">cadastrar os 8 participantes</a>.
     </p>
 <?php else: ?>
 
@@ -23,8 +20,7 @@ if ($participantes === null): ?>
         </p>
     <?php endif; ?>
 
-    <form action="gerar_rodadas.php" method="post" class="formulario" id="form-config"
-          <?= $torneio !== null ? 'data-confirmar data-mensagem="Gerar novas rodadas apaga os placares já lançados. Continuar?"' : '' ?>>
+    <form action="index.php?acao=gerar_rodadas" method="post" class="formulario">
 
         <fieldset>
             <legend>Escolha o formato de duplas</legend>
@@ -47,33 +43,39 @@ if ($participantes === null): ?>
             </label>
         </fieldset>
 
-        <fieldset id="secao-duplas" hidden>
-            <legend>Formação das 4 duplas</legend>
+        <fieldset>
+            <legend>Formação das 4 duplas (usada apenas no formato de duplas fixas)</legend>
             <label class="opcao-sorteio">
-                <input type="checkbox" name="sortear_duplas" value="1" id="sortear-duplas" checked>
+                <input type="checkbox" name="sortear_duplas" value="1" checked>
                 Sortear as duplas automaticamente
             </label>
-            <div id="escolha-duplas" hidden>
-                <?php for ($d = 0; $d < 4; $d++): ?>
-                    <div class="linha-dupla">
-                        <strong>Dupla <?= $d + 1 ?>:</strong>
-                        <?php for ($j = 0; $j < 2; $j++): ?>
-                            <select name="dupla[<?= $d ?>][]">
-                                <?php foreach ($participantes as $p): ?>
-                                    <option value="<?= $p['id'] ?>"
-                                        <?= $p['id'] === $d * 2 + $j + 1 ? 'selected' : '' ?>>
-                                        <?= e($p['nome']) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        <?php endfor; ?>
-                    </div>
-                <?php endfor; ?>
-            </div>
+            <p>Para montar as duplas manualmente, desmarque o sorteio e escolha os pares:</p>
+            <?php for ($d = 0; $d < 4; $d++): ?>
+                <div class="linha-dupla">
+                    <strong>Dupla <?= $d + 1 ?>:</strong>
+                    <?php for ($j = 0; $j < 2; $j++): ?>
+                        <select name="dupla[<?= $d ?>][]">
+                            <?php foreach ($participantes as $p): ?>
+                                <option value="<?= $p['id'] ?>"
+                                    <?= $p['id'] === $d * 2 + $j + 1 ? 'selected' : '' ?>>
+                                    <?= e($p['nome']) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    <?php endfor; ?>
+                </div>
+            <?php endfor; ?>
         </fieldset>
+
+        <?php if ($torneio !== null): ?>
+            <label class="opcao-sorteio">
+                <input type="checkbox" name="confirmar_regerar" value="1" required>
+                Entendo que gerar novas rodadas apaga os placares já lançados.
+            </label>
+        <?php endif; ?>
 
         <button type="submit" class="botao">🎲 Gerar as 7 rodadas</button>
     </form>
 <?php endif;
 
-rodape('..');
+rodape();

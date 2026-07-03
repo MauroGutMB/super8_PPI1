@@ -14,12 +14,9 @@
  *   3. Games vencidos
  *   4. Número de vitórias
  *   5. Ordem alfabética do nome
+ *
+ * PONTOS_VITORIA e PONTOS_EMPATE são definidas em config/config.php.
  */
-
-require_once __DIR__ . '/json_helper.php';
-
-const PONTOS_VITORIA = 2;
-const PONTOS_EMPATE  = 1;
 
 function partida_completa(array $partida): bool
 {

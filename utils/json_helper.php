@@ -2,9 +2,8 @@
 /**
  * Funções reutilizáveis de leitura e escrita de arquivos JSON.
  * Toda a persistência do sistema passa por aqui (sem banco de dados).
+ * DATA_DIR é definida em config/config.php.
  */
-
-define('DATA_DIR', dirname(__DIR__) . '/data');
 
 function ler_json(string $arquivo): ?array
 {

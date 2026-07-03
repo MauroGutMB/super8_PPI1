@@ -1,18 +1,14 @@
 <?php
-require_once __DIR__ . '/../utils/json_helper.php';
-require_once __DIR__ . '/../utils/pontuacao.php';
-require_once __DIR__ . '/../utils/layout.php';
-
 $participantes = carregar_participantes();
 $torneio       = carregar_torneio();
 
-cabecalho('Rodadas e Placares', '..');
+cabecalho('Rodadas e Placares');
 mensagens_flash();
 
 if ($participantes === null || $torneio === null) {
     echo '<p class="msg msg-erro">As rodadas ainda não foram geradas. '
-       . 'Passe pelo <a href="../index.php">menu inicial</a> para configurar o torneio.</p>';
-    rodape('..');
+       . 'Passe pelo <a href="' . e(url_para('inicio')) . '">menu inicial</a> para configurar o torneio.</p>';
+    rodape();
     exit;
 }
 
@@ -26,9 +22,12 @@ function nome_dupla(array $dupla, array $nomes): string
     return e($nomes[$dupla[0]] . ' & ' . $nomes[$dupla[1]]);
 }
 
-$atual = rodada_atual($torneio);
-$total = count($torneio['rodadas']);
+$atual  = rodada_atual($torneio);
+$total  = count($torneio['rodadas']);
 $feitas = $atual === null ? $total : $atual - 1;
+
+// Partida da rodada atual cujo placar está sendo editado (?editar=<índice>)
+$editar = filter_input(INPUT_GET, 'editar', FILTER_VALIDATE_INT);
 ?>
 
 <p class="msg msg-info">
@@ -38,7 +37,7 @@ $feitas = $atual === null ? $total : $atual - 1;
         (faltam <?= $total - $feitas ?>)
     <?php else: ?>
         — <strong>todas as rodadas concluídas! 🏆</strong>
-        Confira a <a href="../classificacao/classificacao.php">classificação final</a>.
+        Confira a <a href="<?= e(url_para('classificacao')) ?>">classificação final</a>.
     <?php endif; ?>
 </p>
 <div class="progresso-wrap">
@@ -74,8 +73,9 @@ $feitas = $atual === null ? $total : $atual - 1;
     </h3>
 
     <?php foreach ($rodada['partidas'] as $indice => $partida):
-        $completa = partida_completa($partida); ?>
-    <article class="partida">
+        $completa = partida_completa($partida);
+        $editando = $ehAtual && (!$completa || $editar === $indice); ?>
+    <article class="partida" id="partida-<?= $numero ?>-<?= $indice ?>">
         <p class="confronto">
             <span class="quadra">Quadra <?= $partida['quadra'] ?></span>
             <strong><?= nome_dupla($partida['dupla_a'], $nomes) ?></strong>
@@ -83,18 +83,20 @@ $feitas = $atual === null ? $total : $atual - 1;
             <strong><?= nome_dupla($partida['dupla_b'], $nomes) ?></strong>
         </p>
 
-        <?php if ($completa): ?>
+        <?php if ($completa && !$editando): ?>
             <p class="placar-final">
                 Placar: <strong><?= $partida['games_a'] ?> × <?= $partida['games_b'] ?></strong>
                 <?php if ($ehAtual): ?>
-                    <button type="button" class="botao botao-mini botao-editar">✏️ Editar</button>
+                    <a class="botao botao-mini"
+                       href="<?= e(url_para('rodadas') . '&editar=' . $indice) ?>#partida-<?= $numero ?>-<?= $indice ?>">
+                        ✏️ Editar
+                    </a>
                 <?php endif; ?>
             </p>
         <?php endif; ?>
 
-        <?php if ($ehAtual): ?>
-            <form class="form-placar <?= $completa ? 'oculto' : '' ?>" method="post"
-                  action="salvar_placar.php">
+        <?php if ($editando): ?>
+            <form class="form-placar" method="post" action="index.php?acao=salvar_placar">
                 <input type="hidden" name="rodada" value="<?= $numero ?>">
                 <input type="hidden" name="partida" value="<?= $indice ?>">
                 <label>
@@ -109,7 +111,6 @@ $feitas = $atual === null ? $total : $atual - 1;
                            inputmode="numeric" value="<?= $partida['games_b'] ?? '' ?>">
                 </label>
                 <button type="submit" class="botao botao-mini">Salvar placar</button>
-                <output class="feedback"></output>
             </form>
         <?php elseif (!$completa): ?>
             <p class="aguardando">Disponível quando a rodada anterior for concluída.</p>
@@ -119,4 +120,4 @@ $feitas = $atual === null ? $total : $atual - 1;
 </section>
 <?php endforeach; ?>
 
-<?php rodape('..'); ?>
+<?php rodape(); ?>

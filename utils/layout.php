@@ -1,7 +1,7 @@
 <?php
 /**
  * Cabeçalho e rodapé compartilhados por todas as páginas.
- * $base é o caminho relativo até a raiz do projeto ('.' ou '..').
+ * Como tudo é servido pelo index.php na raiz, os caminhos são sempre relativos a ela.
  */
 
 function e(?string $texto): string
@@ -9,24 +9,31 @@ function e(?string $texto): string
     return htmlspecialchars((string) $texto, ENT_QUOTES, 'UTF-8');
 }
 
-function cabecalho(string $titulo, string $base = '.'): void
+/**
+ * @param int|null $refresh Se informado, a página recarrega sozinha a cada N segundos
+ *                          (usado na classificação enquanto o torneio está em andamento).
+ */
+function cabecalho(string $titulo, ?int $refresh = null): void
 {
     $links = [
-        'index.php'                       => 'Início',
-        'participantes/cadastro.php'      => 'Participantes',
-        'configuracao/configuracao.php'   => 'Configuração',
-        'rodadas/rodadas.php'             => 'Rodadas',
-        'classificacao/classificacao.php' => 'Classificação',
+        'inicio'        => 'Início',
+        'participantes' => 'Participantes',
+        'configuracao'  => 'Configuração',
+        'rodadas'       => 'Rodadas',
+        'classificacao' => 'Classificação',
     ];
-    $atual = basename($_SERVER['SCRIPT_NAME']);
+    $atual = $_GET['pagina'] ?? 'inicio';
     ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <?php if ($refresh !== null): ?>
+        <meta http-equiv="refresh" content="<?= $refresh ?>">
+    <?php endif; ?>
     <title><?= e($titulo) ?> · Super 8 Beach Tennis</title>
-    <link rel="stylesheet" href="<?= e($base) ?>/css/style.css">
+    <link rel="stylesheet" href="style/style.css">
 </head>
 <body>
 <a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
@@ -34,10 +41,10 @@ function cabecalho(string $titulo, string $base = '.'): void
     <div class="topo-inner">
         <h1>🏖️ Super 8 · Beach Tennis</h1>
         <nav aria-label="Navegação principal">
-            <?php foreach ($links as $href => $rotulo): ?>
-                <a href="<?= e($base . '/' . $href) ?>"
-                   class="<?= basename($href) === $atual ? 'ativo' : '' ?>"
-                   <?= basename($href) === $atual ? 'aria-current="page"' : '' ?>
+            <?php foreach ($links as $pagina => $rotulo): ?>
+                <a href="<?= e(url_para($pagina)) ?>"
+                   class="<?= $pagina === $atual ? 'ativo' : '' ?>"
+                   <?= $pagina === $atual ? 'aria-current="page"' : '' ?>
                 ><?= e($rotulo) ?></a>
             <?php endforeach; ?>
         </nav>
@@ -48,12 +55,11 @@ function cabecalho(string $titulo, string $base = '.'): void
     <?php
 }
 
-function rodape(string $base = '.'): void
+function rodape(): void
 {
     ?>
 </main>
 <footer class="rodape">Sistema Super 8 — Programação para Internet I</footer>
-<script src="<?= e($base) ?>/js/ui.js"></script>
 </body>
 </html>
     <?php

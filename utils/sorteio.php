@@ -13,9 +13,9 @@
  *   possíveis por dupla). O ciclo de 3 rodadas é repetido até completar
  *   as 7 rodadas do Super 8: turno (1-3), returno com mando invertido
  *   (4-6) e rodada final repetindo o padrão da 1ª (7).
+ *
+ * TOTAL_RODADAS é definida em config/config.php.
  */
-
-const TOTAL_RODADAS = 7;
 
 function gerar_rodadas_rotativas(array $ids): array
 {

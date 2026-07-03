@@ -557,19 +557,6 @@ main h3 {
 }
 
 .form-placar .vs { font-size: 1.25rem; padding-bottom: var(--sp-2); }
-.form-placar.oculto { display: none; }
-
-.feedback {
-    font-size: 0.875rem;
-    font-weight: 600;
-    flex-basis: 100%;
-    padding: var(--sp-2) var(--sp-3);
-    border-radius: var(--r-sm);
-    display: none;
-}
-.feedback:not(:empty) { display: block; }
-.feedback.ok   { color: #1a5c55; background: var(--ok-claro); }
-.feedback.erro { color: #8b1a22; background: var(--erro-claro); }
 
 /* === 15. Tabela de classificação === */
 .tabela-rolagem {
@@ -649,7 +636,6 @@ main h3 {
     color: var(--texto-suave);
 }
 
-.acoes-classificacao { text-align: right; margin-bottom: var(--sp-3); }
 
 /* === 17. Gráfico de evolução === */
 .grafico {
@@ -705,7 +691,7 @@ main h3 {
 /* === 19. Impressão === */
 @media print {
     .skip-link, .topo nav, .rodape,
-    .acoes-classificacao, .form-reiniciar, .botao { display: none !important; }
+    .form-reiniciar, .botao { display: none !important; }
     body { background: #fff; }
     .msg { border: 1px solid #ccc; }
     .topo { box-shadow: none; }

@@ -1,11 +1,8 @@
 <?php
-require_once __DIR__ . '/../utils/json_helper.php';
-require_once __DIR__ . '/../utils/layout.php';
-
 $participantes = carregar_participantes() ?? [];
 $torneio       = carregar_torneio();
 
-cabecalho('Cadastro de Participantes', '..');
+cabecalho('Cadastro de Participantes');
 mensagens_flash();
 
 if ($torneio !== null): ?>
@@ -17,7 +14,7 @@ if ($torneio !== null): ?>
     <p>Informe os <strong>8 participantes</strong> do Super 8. O apelido é opcional
        e, quando preenchido, é usado nas tabelas e confrontos.</p>
 
-    <form action="salvar_participantes.php" method="post" id="form-cadastro" class="formulario">
+    <form action="index.php?acao=salvar_participantes" method="post" class="formulario">
         <?php for ($i = 0; $i < 8; $i++): ?>
             <fieldset class="linha-jogador">
                 <legend>Jogador <?= $i + 1 ?></legend>
@@ -37,4 +34,4 @@ if ($torneio !== null): ?>
     </form>
 <?php endif;
 
-rodape('..');
+rodape();

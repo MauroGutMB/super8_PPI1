@@ -4,22 +4,18 @@
  * gera as 7 rodadas e grava data/rodadas.json.
  */
 
-require_once __DIR__ . '/../utils/json_helper.php';
-require_once __DIR__ . '/../utils/sorteio.php';
-
-function voltar(string $erro): never
-{
-    header('Location: configuracao.php?erro=' . urlencode($erro));
-    exit;
-}
-
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    voltar('Envie o formulário de configuração.');
+    redirecionar('configuracao', erro: 'Envie o formulário de configuração.');
 }
 
 $participantes = carregar_participantes();
 if ($participantes === null) {
-    voltar('Cadastre os 8 participantes antes de gerar as rodadas.');
+    redirecionar('configuracao', erro: 'Cadastre os 8 participantes antes de gerar as rodadas.');
+}
+
+// Regerar rodadas apaga os placares: exige a confirmação marcada no formulário.
+if (carregar_torneio() !== null && empty($_POST['confirmar_regerar'])) {
+    redirecionar('configuracao', erro: 'Marque a confirmação para gerar novas rodadas (os placares lançados serão apagados).');
 }
 
 $ids     = array_column($participantes, 'id');
@@ -40,7 +36,7 @@ if ($formato === 'rotativas') {
         for ($d = 0; $d < 4; $d++) {
             $par = array_map('intval', (array) ($recebidas[$d] ?? []));
             if (count($par) !== 2) {
-                voltar('A dupla ' . ($d + 1) . ' está incompleta.');
+                redirecionar('configuracao', erro: 'A dupla ' . ($d + 1) . ' está incompleta.');
             }
             $duplas[] = $par;
         }
@@ -49,7 +45,7 @@ if ($formato === 'rotativas') {
         $esperado = $ids;
         sort($esperado);
         if ($todos !== $esperado) {
-            voltar('Cada jogador deve aparecer em exatamente uma dupla. Revise a escolha.');
+            redirecionar('configuracao', erro: 'Cada jogador deve aparecer em exatamente uma dupla. Revise a escolha.');
         }
     }
     $dados = [
@@ -58,13 +54,11 @@ if ($formato === 'rotativas') {
         'rodadas'      => gerar_rodadas_fixas($duplas),
     ];
 } else {
-    voltar('Escolha um formato de duplas válido.');
+    redirecionar('configuracao', erro: 'Escolha um formato de duplas válido.');
 }
 
 if (!gravar_json('rodadas.json', $dados)) {
-    voltar('Falha ao gravar o arquivo rodadas.json (verifique permissões da pasta data/).');
+    redirecionar('configuracao', erro: 'Falha ao gravar o arquivo rodadas.json (verifique permissões da pasta data/).');
 }
 
-header('Location: ../rodadas/rodadas.php?ok='
-    . urlencode('Rodadas geradas! Bom torneio. 🎾'));
-exit;
+redirecionar('rodadas', ok: 'Rodadas geradas! Bom torneio. 🎾');

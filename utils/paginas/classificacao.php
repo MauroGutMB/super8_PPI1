@@ -1,29 +1,29 @@
 <?php
-require_once __DIR__ . '/../utils/json_helper.php';
-require_once __DIR__ . '/../utils/pontuacao.php';
-require_once __DIR__ . '/../utils/layout.php';
-
 $participantes = carregar_participantes();
 $torneio       = carregar_torneio();
 
-cabecalho('Classificação', '..');
-mensagens_flash();
-
 if ($participantes === null || $torneio === null) {
+    cabecalho('Classificação');
+    mensagens_flash();
     echo '<p class="msg msg-erro">O torneio ainda não foi gerado. '
-       . 'Passe pelo <a href="../index.php">menu inicial</a> para configurar.</p>';
-    rodape('..');
+       . 'Passe pelo <a href="' . e(url_para('inicio')) . '">menu inicial</a> para configurar.</p>';
+    rodape();
     exit;
 }
 
 $individual = calcular_classificacao($participantes, $torneio);
 $finalizado = rodada_atual($torneio) === null;
 
-function tabela_classificacao(array $linhas, string $rotulo, string $idTabela): void
+// Enquanto o torneio está em andamento a página recarrega sozinha (meta refresh),
+// mantendo a tabela atualizada sem JavaScript.
+cabecalho('Classificação', $finalizado ? null : 20);
+mensagens_flash();
+
+function tabela_classificacao(array $linhas, string $rotulo): void
 {
     ?>
     <div class="tabela-rolagem">
-    <table class="tabela-classificacao" id="<?= e($idTabela) ?>">
+    <table class="tabela-classificacao">
         <thead>
         <tr>
             <th>#</th><th><?= e($rotulo) ?></th><th>J</th><th>V</th><th>E</th><th>D</th>
@@ -115,26 +115,22 @@ function grafico_evolucao(array $participantes, array $torneio): void
         🏆 Torneio finalizado — campeão(ã):
         <strong><?= e($individual[0]['nome']) ?></strong>!
     <?php else: ?>
-        Tabela atualizada em tempo real conforme os placares são lançados
+        Tabela atualizada automaticamente a cada 20 segundos
         (rodada atual: <?= rodada_atual($torneio) ?> de <?= count($torneio['rodadas']) ?>).
+        Para imprimir ou exportar, use <kbd>Ctrl</kbd>+<kbd>P</kbd>.
     <?php endif; ?>
-</p>
-
-<p class="acoes-classificacao">
-    <button type="button" class="botao botao-mini" id="botao-imprimir">🖨️ Imprimir / exportar</button>
 </p>
 
 <?php if ($torneio['formato'] === 'fixas'): ?>
     <h3>Ranking das duplas</h3>
     <?php tabela_classificacao(
         calcular_classificacao_duplas($participantes, $torneio),
-        'Dupla',
-        'tabela-duplas'
+        'Dupla'
     ); ?>
     <h3>Ranking individual</h3>
 <?php endif; ?>
 
-<?php tabela_classificacao($individual, 'Jogador', 'tabela-individual'); ?>
+<?php tabela_classificacao($individual, 'Jogador'); ?>
 
 <details class="regras" open>
     <summary>Regras de pontuação e desempate</summary>
@@ -150,4 +146,4 @@ function grafico_evolucao(array $participantes, array $torneio): void
 <h3>📊 Evolução da pontuação</h3>
 <?php grafico_evolucao($participantes, $torneio); ?>
 
-<?php rodape('..'); ?>
+<?php rodape(); ?>
