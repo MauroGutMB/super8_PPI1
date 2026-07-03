@@ -41,9 +41,16 @@ $feitas = $atual === null ? $total : $atual - 1;
         Confira a <a href="../classificacao/classificacao.php">classificação final</a>.
     <?php endif; ?>
 </p>
-<div class="progresso" role="progressbar" aria-valuemin="0" aria-valuemax="<?= $total ?>"
-     aria-valuenow="<?= $feitas ?>">
-    <div class="progresso-barra" style="width: <?= round($feitas / $total * 100) ?>%"></div>
+<div class="progresso-wrap">
+    <div class="progresso-label" aria-hidden="true">
+        <span>Progresso</span>
+        <span><?= $feitas ?> de <?= $total ?> rodadas concluídas</span>
+    </div>
+    <div class="progresso" role="progressbar" aria-valuemin="0" aria-valuemax="<?= $total ?>"
+         aria-valuenow="<?= $feitas ?>"
+         aria-label="<?= $feitas ?> de <?= $total ?> rodadas concluídas">
+        <div class="progresso-barra" style="width: <?= round($feitas / $total * 100) ?>%"></div>
+    </div>
 </div>
 
 <?php foreach ($torneio['rodadas'] as $rodada):
@@ -79,11 +86,13 @@ $feitas = $atual === null ? $total : $atual - 1;
         <?php if ($completa): ?>
             <p class="placar-final">
                 Placar: <strong><?= $partida['games_a'] ?> × <?= $partida['games_b'] ?></strong>
-                <button type="button" class="botao botao-mini botao-editar">✏️ Editar</button>
+                <?php if ($ehAtual): ?>
+                    <button type="button" class="botao botao-mini botao-editar">✏️ Editar</button>
+                <?php endif; ?>
             </p>
         <?php endif; ?>
 
-        <?php if ($ehAtual && !$completa || $completa): ?>
+        <?php if ($ehAtual): ?>
             <form class="form-placar <?= $completa ? 'oculto' : '' ?>" method="post"
                   action="salvar_placar.php">
                 <input type="hidden" name="rodada" value="<?= $numero ?>">

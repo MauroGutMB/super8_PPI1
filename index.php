@@ -25,23 +25,35 @@ mensagens_flash();
 <div class="cartoes">
     <a class="cartao <?= $estado !== 'sem_participantes' ? 'feito' : '' ?>"
        href="participantes/cadastro.php">
-        <h3>1. Participantes</h3>
-        <p>Cadastrar os 8 jogadores do torneio.</p>
+        <div class="cartao-icone" aria-hidden="true">👤</div>
+        <div class="cartao-texto">
+            <h3>1. Participantes</h3>
+            <p>Cadastrar os 8 jogadores do torneio.</p>
+        </div>
     </a>
     <a class="cartao <?= in_array($estado, ['em_andamento', 'finalizado']) ? 'feito' : '' ?> <?= $estado === 'sem_participantes' ? 'bloqueado' : '' ?>"
        href="configuracao/configuracao.php">
-        <h3>2. Formato e Rodadas</h3>
-        <p>Escolher duplas fixas ou rotativas e gerar as 7 rodadas.</p>
+        <div class="cartao-icone" aria-hidden="true">⚙️</div>
+        <div class="cartao-texto">
+            <h3>2. Formato e Rodadas</h3>
+            <p>Escolher duplas fixas ou rotativas e gerar as 7 rodadas.</p>
+        </div>
     </a>
     <a class="cartao <?= !in_array($estado, ['em_andamento', 'finalizado']) ? 'bloqueado' : '' ?>"
        href="rodadas/rodadas.php">
-        <h3>3. Rodadas e Placares</h3>
-        <p>Acompanhar os confrontos e lançar os resultados.</p>
+        <div class="cartao-icone" aria-hidden="true">🎾</div>
+        <div class="cartao-texto">
+            <h3>3. Rodadas e Placares</h3>
+            <p>Acompanhar os confrontos e lançar os resultados.</p>
+        </div>
     </a>
     <a class="cartao <?= !in_array($estado, ['em_andamento', 'finalizado']) ? 'bloqueado' : '' ?>"
        href="classificacao/classificacao.php">
-        <h3>4. Classificação</h3>
-        <p>Tabela de pontuação atualizada em tempo real.</p>
+        <div class="cartao-icone" aria-hidden="true">🏆</div>
+        <div class="cartao-texto">
+            <h3>4. Classificação</h3>
+            <p>Tabela de pontuação atualizada em tempo real.</p>
+        </div>
     </a>
 </div>
 

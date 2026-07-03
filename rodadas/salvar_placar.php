@@ -6,9 +6,8 @@
  * Regras de validação:
  *  - games entre 0 e 7, e o maior valor deve ser pelo menos 4
  *    (sets curtos do Super 8 vão até 4 ou 5 games; empate 4x4 é aceito);
- *  - só é possível lançar placar na rodada atual (a primeira pendente);
- *  - placares já lançados podem ser editados a qualquer momento —
- *    a classificação é sempre recalculada a partir do rodadas.json.
+ *  - só é possível lançar ou editar placar na rodada atual (a primeira pendente);
+ *  - rodadas passadas e torneio finalizado são bloqueados para edição.
  */
 
 require_once __DIR__ . '/../utils/json_helper.php';
@@ -54,9 +53,15 @@ if (max($games_a, $games_b) < 4) {
     responder(false, 'Placar inválido: pelo menos uma dupla precisa ter 4 games ou mais.');
 }
 
-$atual   = rodada_atual($torneio);
-$edicao  = partida_completa($partida);
-if (!$edicao && $numero !== $atual) {
+$atual  = rodada_atual($torneio);
+$edicao = partida_completa($partida);
+if ($numero !== $atual) {
+    if ($atual === null) {
+        responder(false, 'O torneio já foi finalizado; não é possível editar placares.');
+    }
+    if ($numero < $atual) {
+        responder(false, 'Esta rodada já foi concluída; placares de rodadas passadas não podem ser alterados.');
+    }
     responder(false, "Lance primeiro os placares da rodada $atual.");
 }
 

@@ -29,16 +29,21 @@ function cabecalho(string $titulo, string $base = '.'): void
     <link rel="stylesheet" href="<?= e($base) ?>/css/style.css">
 </head>
 <body>
+<a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
 <header class="topo">
-    <h1>🏖️ Super 8 · Beach Tennis</h1>
-    <nav>
-        <?php foreach ($links as $href => $rotulo): ?>
-            <a href="<?= e($base . '/' . $href) ?>"
-               class="<?= basename($href) === $atual ? 'ativo' : '' ?>"><?= e($rotulo) ?></a>
-        <?php endforeach; ?>
-    </nav>
+    <div class="topo-inner">
+        <h1>🏖️ Super 8 · Beach Tennis</h1>
+        <nav aria-label="Navegação principal">
+            <?php foreach ($links as $href => $rotulo): ?>
+                <a href="<?= e($base . '/' . $href) ?>"
+                   class="<?= basename($href) === $atual ? 'ativo' : '' ?>"
+                   <?= basename($href) === $atual ? 'aria-current="page"' : '' ?>
+                ><?= e($rotulo) ?></a>
+            <?php endforeach; ?>
+        </nav>
+    </div>
 </header>
-<main>
+<main id="conteudo">
     <h2><?= e($titulo) ?></h2>
     <?php
 }
