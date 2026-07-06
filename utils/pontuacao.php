@@ -4,9 +4,25 @@ function partida_completa(array $partida): bool
     return $partida['games_a'] !== null && $partida['games_b'] !== null;
 }
 
+function rodada_completa(array $rodada): bool
+{
+    foreach ($rodada['partidas'] as $partida) {
+        if (!partida_completa($partida)) {
+            return false;
+        }
+    }
+    return true;
+}
+
 function pontos_da_partida(int $games_pro, int $games_contra): int
 {
     return $games_pro + ($games_pro > $games_contra ? PONTOS_VITORIA : 0);
+}
+
+function chave_dupla(array $dupla): string
+{
+    sort($dupla);
+    return implode('-', $dupla);
 }
 
 function linha_zerada(int $id, string $nome, string $apelido = ''): array
@@ -77,10 +93,7 @@ function calcular_classificacao_duplas(array $participantes, array $torneio): ar
 
     $tabela = [];
     foreach ($torneio['duplas_fixas'] as $i => $dupla) {
-        $jogadores = $dupla;
-        sort($jogadores);
-        $chave = implode('-', $jogadores);
-        $tabela[$chave] = linha_zerada(
+        $tabela[chave_dupla($dupla)] = linha_zerada(
             $i + 1,
             $nomes[$dupla[0]] . ' / ' . $nomes[$dupla[1]]
         );
@@ -92,11 +105,8 @@ function calcular_classificacao_duplas(array $participantes, array $torneio): ar
                 continue;
             }
             foreach (['dupla_a' => 'games_a', 'dupla_b' => 'games_b'] as $lado => $campo) {
-                $jogadores = $partida[$lado];
-                sort($jogadores);
-                $chave  = implode('-', $jogadores);
-                $outro  = $campo === 'games_a' ? 'games_b' : 'games_a';
-                acumular_resultado($tabela[$chave], $partida[$campo], $partida[$outro]);
+                $outro = $campo === 'games_a' ? 'games_b' : 'games_a';
+                acumular_resultado($tabela[chave_dupla($partida[$lado])], $partida[$campo], $partida[$outro]);
             }
         }
     }
@@ -116,14 +126,7 @@ function evolucao_pontuacao(array $participantes, array $torneio): array
     }
 
     foreach ($torneio['rodadas'] as $rodada) {
-        $completa = true;
-        foreach ($rodada['partidas'] as $partida) {
-            if (!partida_completa($partida)) {
-                $completa = false;
-                break;
-            }
-        }
-        if (!$completa) {
+        if (!rodada_completa($rodada)) {
             break;
         }
         foreach ($rodada['partidas'] as $partida) {
@@ -138,5 +141,43 @@ function evolucao_pontuacao(array $participantes, array $torneio): array
             $evolucao[$id][] = $pontos;
         }
     }
-    return $evolucao;
+
+    $series = [];
+    foreach ($participantes as $p) {
+        $series[nome_exibicao($p)] = $evolucao[$p['id']];
+    }
+    return $series;
+}
+
+function evolucao_pontuacao_duplas(array $participantes, array $torneio): array
+{
+    $nomes     = mapa_nomes($participantes);
+    $acumulado = [];
+    $evolucao  = [];
+    foreach ($torneio['duplas_fixas'] as $dupla) {
+        $chave = chave_dupla($dupla);
+        $acumulado[$chave] = 0;
+        $evolucao[$chave]  = [];
+    }
+
+    foreach ($torneio['rodadas'] as $rodada) {
+        if (!rodada_completa($rodada)) {
+            break;
+        }
+        foreach ($rodada['partidas'] as $partida) {
+            foreach (['dupla_a' => 'games_a', 'dupla_b' => 'games_b'] as $lado => $campo) {
+                $outro = $campo === 'games_a' ? 'games_b' : 'games_a';
+                $acumulado[chave_dupla($partida[$lado])] += pontos_da_partida($partida[$campo], $partida[$outro]);
+            }
+        }
+        foreach ($acumulado as $chave => $pontos) {
+            $evolucao[$chave][] = $pontos;
+        }
+    }
+
+    $series = [];
+    foreach ($torneio['duplas_fixas'] as $dupla) {
+        $series[$nomes[$dupla[0]] . ' / ' . $nomes[$dupla[1]]] = $evolucao[chave_dupla($dupla)];
+    }
+    return $series;
 }

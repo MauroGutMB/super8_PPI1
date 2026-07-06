@@ -43,7 +43,7 @@ if ($participantes === null): ?>
                 <span>
                     <strong>👥 Duplas fixas</strong><br>
                     4 duplas definidas no início; cada dupla enfrenta as outras
-                    uma única vez (3 rodadas). Classificação por dupla e individual.
+                    uma única vez (3 rodadas). Classificação e gráfico por dupla.
                 </span>
             </label>
         </fieldset>

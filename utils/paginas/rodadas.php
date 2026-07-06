@@ -50,14 +50,8 @@ $editar = filter_input(INPUT_GET, 'editar', FILTER_VALIDATE_INT);
 
 <?php foreach ($torneio['rodadas'] as $rodada):
     $numero    = $rodada['numero'];
-    $concluida = true;
-    foreach ($rodada['partidas'] as $p) {
-        if (!partida_completa($p)) {
-            $concluida = false;
-            break;
-        }
-    }
-    $ehAtual = $numero === $atual;
+    $concluida = rodada_completa($rodada);
+    $ehAtual   = $numero === $atual;
     $classe  = $ehAtual ? 'rodada-atual' : ($concluida ? 'rodada-concluida' : 'rodada-futura');
 ?>
 <section class="rodada <?= $classe ?>">

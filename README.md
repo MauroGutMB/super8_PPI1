@@ -24,11 +24,11 @@ de escrita (em Linux: `chmod 775 data`).
 
 1. **Participantes** — cadastre exatamente 8 jogadores (nome obrigatório, apelido opcional).
 2. **Configuração** — escolha o formato e gere as rodadas:
-   - 🔁 **Duplas rotativas**: as duplas mudam a cada rodada (7 rodadas) e a
-     pontuação é individual.
+   - 🔁 **Duplas rotativas**: as duplas mudam a cada rodada (7 rodadas);
+     classificação e gráfico **individuais**.
    - 👥 **Duplas fixas**: 4 duplas (sorteadas ou montadas manualmente); cada dupla
-     enfrenta as outras uma única vez (3 rodadas). Classificação por dupla **e**
-     individual.
+     enfrenta as outras uma única vez (3 rodadas); classificação e gráfico
+     **por dupla**.
 3. **Rodadas** — lance o placar das 2 partidas de cada rodada. A próxima rodada só
    libera quando a atual estiver completa. Placares já lançados podem ser **editados**
    (a classificação é recalculada automaticamente).
