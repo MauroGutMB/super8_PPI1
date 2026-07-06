@@ -1,18 +1,9 @@
 <?php
-/**
- * Configurações centrais do sistema e carregamento dos utilitários.
- * request passa por aqui (via index.php) antes de qualquer página ou ação.
- */
-
 define('BASE_DIR', dirname(__DIR__));
-define('DATA_DIR', BASE_DIR . '/data'); // participantes.json e rodadas.json (gerados em uso)
+define('DATA_DIR', BASE_DIR . '/data');
 
-const TOTAL_RODADAS  = 7; // rodadas do Super 8
+const TOTAL_RODADAS  = 7;
 const PONTOS_VITORIA = 2;
-const PONTOS_EMPATE  = 1;
-
-// Limites de tamanho dos campos do cadastro (usados no maxlength do
-// formulário e na validação do servidor, para não dessincronizarem)
 const LIMITE_NOME    = 60;
 const LIMITE_APELIDO = 30;
 
@@ -21,13 +12,11 @@ require_once BASE_DIR . '/utils/sorteio.php';
 require_once BASE_DIR . '/utils/pontuacao.php';
 require_once BASE_DIR . '/utils/layout.php';
 
-/** URL de uma página do sistema (roteada pelo index.php). */
 function url_para(string $pagina): string
 {
     return 'index.php?pagina=' . urlencode($pagina);
 }
 
-/** Redireciona para uma página, com mensagem opcional de sucesso ou de erro. */
 function redirecionar(string $pagina, ?string $ok = null, ?string $erro = null): never
 {
     $url = url_para($pagina);

@@ -1,15 +1,4 @@
 <?php
-/**
- * Recebe o placar de uma partida via POST, valida as regras,
- * atualiza data/rodadas.json e redireciona de volta às rodadas.
- *
- * Regras de validação:
- *  - games entre 0 e 7, e o maior valor deve ser pelo menos 4
- *    (sets curtos do Super 8 vão até 4 ou 5 games; empate 4x4 é aceito);
- *  - só é possível lançar ou editar placar na rodada atual (a primeira pendente);
- *  - rodadas passadas e torneio finalizado são bloqueados para edição.
- */
-
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     redirecionar('rodadas', erro: 'Use o formulário de placar.');
 }
@@ -37,6 +26,9 @@ $partida = &$rodada['partidas'][$indice];
 if ($games_a === false || $games_b === false || $games_a === null || $games_b === null
     || $games_a < 0 || $games_a > 7 || $games_b < 0 || $games_b > 7) {
     redirecionar('rodadas', erro: 'Informe games entre 0 e 7 para as duas duplas.');
+}
+if ($games_a === $games_b) {
+    redirecionar('rodadas', erro: 'Empate não é permitido: uma das duplas precisa vencer a partida.');
 }
 if (max($games_a, $games_b) < 4) {
     redirecionar('rodadas', erro: 'Placar inválido: pelo menos uma dupla precisa ter 4 games ou mais.');

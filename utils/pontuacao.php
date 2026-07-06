@@ -1,38 +1,12 @@
 <?php
-/**
- * Cálculo de pontuação e classificação.
- *
- * Regra adotada (documentada no README):
- *   - Vitória na partida ... +2 pontos
- *   - Empate (ex.: 4x4) .... +1 ponto para cada lado
- *   - Derrota ............... 0 pontos
- *   - Cada game vencido .... +1 ponto
- *
- * Critérios de desempate, nesta ordem:
- *   1. Total de pontos
- *   2. Saldo de games (vencidos - perdidos)
- *   3. Games vencidos
- *   4. Número de vitórias
- *   5. Ordem alfabética do nome
- *
- * PONTOS_VITORIA e PONTOS_EMPATE são definidas em config/config.php.
- */
-
 function partida_completa(array $partida): bool
 {
     return $partida['games_a'] !== null && $partida['games_b'] !== null;
 }
 
-/** Pontos que cada jogador de uma dupla ganha em uma partida. */
 function pontos_da_partida(int $games_pro, int $games_contra): int
 {
-    $pontos = $games_pro; // 1 ponto por game vencido
-    if ($games_pro > $games_contra) {
-        $pontos += PONTOS_VITORIA;
-    } elseif ($games_pro === $games_contra) {
-        $pontos += PONTOS_EMPATE;
-    }
-    return $pontos;
+    return $games_pro + ($games_pro > $games_contra ? PONTOS_VITORIA : 0);
 }
 
 function linha_zerada(int $id, string $nome, string $apelido = ''): array
@@ -43,7 +17,6 @@ function linha_zerada(int $id, string $nome, string $apelido = ''): array
         'apelido'      => $apelido,
         'jogos'        => 0,
         'vitorias'     => 0,
-        'empates'      => 0,
         'derrotas'     => 0,
         'games_pro'    => 0,
         'games_contra' => 0,
@@ -61,8 +34,6 @@ function acumular_resultado(array &$linha, int $pro, int $contra): void
     $linha['pontos']       += pontos_da_partida($pro, $contra);
     if ($pro > $contra) {
         $linha['vitorias']++;
-    } elseif ($pro === $contra) {
-        $linha['empates']++;
     } else {
         $linha['derrotas']++;
     }
@@ -74,7 +45,6 @@ function comparar_linhas(array $a, array $b): int
        <=> [$a['pontos'], $a['saldo'], $a['games_pro'], $a['vitorias'], $b['nome']];
 }
 
-/** Classificação individual: lista ordenada de linhas, uma por jogador. */
 function calcular_classificacao(array $participantes, array $torneio): array
 {
     $tabela = [];
@@ -101,7 +71,6 @@ function calcular_classificacao(array $participantes, array $torneio): array
     return $lista;
 }
 
-/** Classificação por dupla (apenas formato de duplas fixas). */
 function calcular_classificacao_duplas(array $participantes, array $torneio): array
 {
     $nomes = mapa_nomes($participantes);
@@ -137,10 +106,6 @@ function calcular_classificacao_duplas(array $participantes, array $torneio): ar
     return $lista;
 }
 
-/**
- * Evolução da pontuação individual ao longo das rodadas concluídas.
- * Retorna [id_jogador => [pontos acumulados após a rodada 1, 2, ...]].
- */
 function evolucao_pontuacao(array $participantes, array $torneio): array
 {
     $acumulado = [];
@@ -159,7 +124,7 @@ function evolucao_pontuacao(array $participantes, array $torneio): array
             }
         }
         if (!$completa) {
-            break; // só conta rodadas inteiramente lançadas, em ordem
+            break;
         }
         foreach ($rodada['partidas'] as $partida) {
             foreach ($partida['dupla_a'] as $id) {

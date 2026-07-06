@@ -33,7 +33,7 @@ mensagens_flash();
         <div class="cartao-icone" aria-hidden="true">⚙️</div>
         <div class="cartao-texto">
             <h3>2. Formato e Rodadas</h3>
-            <p>Escolher duplas fixas ou rotativas e gerar as 7 rodadas.</p>
+            <p>Escolher duplas fixas ou rotativas e gerar as rodadas.</p>
         </div>
     </a>
     <a class="cartao <?= !in_array($estado, ['em_andamento', 'finalizado']) ? 'bloqueado' : '' ?>"

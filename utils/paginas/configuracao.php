@@ -2,7 +2,6 @@
 $participantes = carregar_participantes();
 $torneio       = carregar_torneio();
 
-// Ao regerar rodadas, o formulário reflete a configuração atual do torneio
 $formatoAtual = $torneio['formato'] ?? 'rotativas';
 $duplasAtuais = $torneio['duplas_fixas'] ?? null;
 
@@ -43,8 +42,8 @@ if ($participantes === null): ?>
                        <?= $formatoAtual === 'fixas' ? 'checked' : '' ?>>
                 <span>
                     <strong>👥 Duplas fixas</strong><br>
-                    4 duplas definidas no início se enfrentam em todos contra todos
-                    (turno, returno e rodada final). Classificação por dupla e individual.
+                    4 duplas definidas no início; cada dupla enfrenta as outras
+                    uma única vez (3 rodadas). Classificação por dupla e individual.
                 </span>
             </label>
         </fieldset>
@@ -52,8 +51,6 @@ if ($participantes === null): ?>
         <fieldset class="secao-duplas">
             <legend>Formação das 4 duplas (usada apenas no formato de duplas fixas)</legend>
             <label class="opcao-sorteio">
-                <?php /* Ao regerar um torneio que já tem duplas montadas, o sorteio começa
-                         desmarcado para o envio padrão preservar as duplas atuais. */ ?>
                 <input type="checkbox" name="sortear_duplas" value="1"
                        <?= $duplasAtuais === null ? 'checked' : '' ?>>
                 Sortear as duplas automaticamente
@@ -86,7 +83,7 @@ if ($participantes === null): ?>
             </label>
         <?php endif; ?>
 
-        <button type="submit" class="botao">🎲 Gerar as 7 rodadas</button>
+        <button type="submit" class="botao">🎲 Gerar as rodadas</button>
     </form>
 <?php endif;
 

@@ -14,8 +14,6 @@ if ($participantes === null || $torneio === null) {
 $individual = calcular_classificacao($participantes, $torneio);
 $finalizado = rodada_atual($torneio) === null;
 
-// Enquanto o torneio está em andamento a página recarrega sozinha (meta refresh),
-// mantendo a tabela atualizada sem JavaScript.
 cabecalho('Classificação', $finalizado ? null : 20);
 mensagens_flash();
 
@@ -26,7 +24,7 @@ function tabela_classificacao(array $linhas, string $rotulo): void
     <table class="tabela-classificacao">
         <thead>
         <tr>
-            <th>#</th><th><?= e($rotulo) ?></th><th>J</th><th>V</th><th>E</th><th>D</th>
+            <th>#</th><th><?= e($rotulo) ?></th><th>J</th><th>V</th><th>D</th>
             <th>GP</th><th>GC</th><th>Saldo</th><th>Pontos</th>
         </tr>
         </thead>
@@ -42,7 +40,6 @@ function tabela_classificacao(array $linhas, string $rotulo): void
             </td>
             <td><?= $l['jogos'] ?></td>
             <td><?= $l['vitorias'] ?></td>
-            <td><?= $l['empates'] ?></td>
             <td><?= $l['derrotas'] ?></td>
             <td><?= $l['games_pro'] ?></td>
             <td><?= $l['games_contra'] ?></td>
@@ -56,7 +53,6 @@ function tabela_classificacao(array $linhas, string $rotulo): void
     <?php
 }
 
-/** Gráfico de linhas (SVG) com a evolução de pontos por rodada, gerado em PHP. */
 function grafico_evolucao(array $participantes, array $torneio): void
 {
     $evolucao = evolucao_pontuacao($participantes, $torneio);
@@ -72,7 +68,7 @@ function grafico_evolucao(array $participantes, array $torneio): void
     $passoX = ($larg - $mEsq - $mDir) / max(1, count($torneio['rodadas']));
     $escalaY = ($alt - $mSup - $mInf) / $maximo;
 
-    $x = fn(int $r): float => $mEsq + $r * $passoX;          // r = 0 é o início (0 pontos)
+    $x = fn(int $r): float => $mEsq + $r * $passoX;
     $y = fn(int $pts): float => $alt - $mInf - $pts * $escalaY;
     ?>
     <svg viewBox="0 0 <?= $larg ?> <?= $alt ?>" class="grafico" role="img"
@@ -141,11 +137,11 @@ function grafico_evolucao(array $participantes, array $torneio): void
 <details class="regras" open>
     <summary>Regras de pontuação e desempate</summary>
     <ul>
-        <li><strong>Vitória:</strong> +2 pontos · <strong>Empate (4×4):</strong> +1 ponto ·
-            <strong>Derrota:</strong> 0 pontos · <strong>Cada game vencido:</strong> +1 ponto.</li>
+        <li><strong>Vitória:</strong> +2 pontos · <strong>Derrota:</strong> 0 pontos ·
+            <strong>Cada game vencido:</strong> +1 ponto. Empates não são permitidos.</li>
         <li><strong>Desempate:</strong> 1) pontos, 2) saldo de games, 3) games vencidos,
             4) vitórias, 5) ordem alfabética.</li>
-        <li>J = jogos · V/E/D = vitórias, empates e derrotas · GP/GC = games pró e contra.</li>
+        <li>J = jogos · V/D = vitórias e derrotas · GP/GC = games pró e contra.</li>
     </ul>
 </details>
 

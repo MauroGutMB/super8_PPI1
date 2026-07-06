@@ -1,25 +1,8 @@
 <?php
-/**
- * Algoritmos de geração de confrontos.
- *
- * - Duplas rotativas: esquema de "whist tournament" para 8 jogadores.
- *   Garante matematicamente que ninguém repete parceiro nas 7 rodadas:
- *   um jogador fica fixo e os outros 7 giram em Z7; em cada rodada os
- *   pares cobrem exatamente uma vez cada diferença módulo 7, então cada
- *   par de jogadores joga junto uma única vez. A ordem dos jogadores é
- *   embaralhada antes, mantendo o caráter de sorteio.
- *
- * - Duplas fixas: todos contra todos entre as 4 duplas (3 confrontos
- *   possíveis por dupla). O ciclo de 3 rodadas é repetido até completar
- *   as 7 rodadas do Super 8: turno (1-3), returno com mando invertido
- *   (4-6) e rodada final repetindo o padrão da 1ª (7).
- *
- * TOTAL_RODADAS é definida em config/config.php.
- */
-
 function gerar_rodadas_rotativas(array $ids): array
 {
-    shuffle($ids);                 // sorteio da posição de cada jogador no esquema
+    // Whist para 8 jogadores: um fixo e os demais girando em Z7 garantem parceiro inédito em todas as rodadas
+    shuffle($ids);
     $fixo = $ids[7];
     $giro = fn(int $x): int => $ids[$x % 7];
 
@@ -48,9 +31,6 @@ function gerar_rodadas_rotativas(array $ids): array
     return $rodadas;
 }
 
-/**
- * @param array $duplas 4 duplas, cada uma um array com 2 ids de jogador
- */
 function gerar_rodadas_fixas(array $duplas): array
 {
     $padroes = [
@@ -60,13 +40,9 @@ function gerar_rodadas_fixas(array $duplas): array
     ];
 
     $rodadas = [];
-    for ($r = 0; $r < TOTAL_RODADAS; $r++) {
-        $returno  = intdiv($r, 3) === 1;
+    foreach ($padroes as $r => $confrontos) {
         $partidas = [];
-        foreach ($padroes[$r % 3] as $quadra => [$ia, $ib]) {
-            if ($returno) {
-                [$ia, $ib] = [$ib, $ia];
-            }
+        foreach ($confrontos as $quadra => [$ia, $ib]) {
             $partidas[] = [
                 'quadra'  => $quadra + 1,
                 'dupla_a' => $duplas[$ia],

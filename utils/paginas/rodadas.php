@@ -23,7 +23,6 @@ $atual  = rodada_atual($torneio);
 $total  = count($torneio['rodadas']);
 $feitas = $atual === null ? $total : $atual - 1;
 
-// Partida da rodada atual cujo placar está sendo editado (?editar=<índice>)
 $editar = filter_input(INPUT_GET, 'editar', FILTER_VALIDATE_INT);
 ?>
 

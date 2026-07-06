@@ -1,8 +1,4 @@
 <?php
-/**
- * Recebe o POST do cadastro, valida e grava data/participantes.json.
- */
-
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     redirecionar('participantes', erro: 'Envie o formulário de cadastro.');
 }
@@ -43,8 +39,6 @@ if (count(array_unique($nomesNormalizados)) !== 8) {
     redirecionar('participantes', erro: 'Há nomes repetidos: cada participante deve ter um nome diferente.');
 }
 
-// O rótulo exibido nas rodadas e tabelas (apelido ou, sem ele, o nome) deve ser
-// único — cobre apelido repetido e também apelido igual ao rótulo de outro jogador.
 $rotulos = array_map(fn($p) => mb_strtolower(nome_exibicao($p)), $participantes);
 if (count(array_unique($rotulos)) !== 8) {
     redirecionar('participantes', erro: 'Há apelidos repetidos ou iguais ao nome de outro jogador: cada um deve aparecer com um rótulo diferente.');

@@ -1,0 +1,240 @@
+{
+    "formato": "fixas",
+    "duplas_fixas": [
+        [
+            2,
+            1
+        ],
+        [
+            5,
+            3
+        ],
+        [
+            4,
+            6
+        ],
+        [
+            8,
+            7
+        ]
+    ],
+    "rodadas": [
+        {
+            "numero": 1,
+            "partidas": [
+                {
+                    "quadra": 1,
+                    "dupla_a": [
+                        2,
+                        1
+                    ],
+                    "dupla_b": [
+                        5,
+                        3
+                    ],
+                    "games_a": 3,
+                    "games_b": 4
+                },
+                {
+                    "quadra": 2,
+                    "dupla_a": [
+                        4,
+                        6
+                    ],
+                    "dupla_b": [
+                        8,
+                        7
+                    ],
+                    "games_a": 7,
+                    "games_b": 2
+                }
+            ]
+        },
+        {
+            "numero": 2,
+            "partidas": [
+                {
+                    "quadra": 1,
+                    "dupla_a": [
+                        2,
+                        1
+                    ],
+                    "dupla_b": [
+                        4,
+                        6
+                    ],
+                    "games_a": null,
+                    "games_b": null
+                },
+                {
+                    "quadra": 2,
+                    "dupla_a": [
+                        5,
+                        3
+                    ],
+                    "dupla_b": [
+                        8,
+                        7
+                    ],
+                    "games_a": null,
+                    "games_b": null
+                }
+            ]
+        },
+        {
+            "numero": 3,
+            "partidas": [
+                {
+                    "quadra": 1,
+                    "dupla_a": [
+                        2,
+                        1
+                    ],
+                    "dupla_b": [
+                        8,
+                        7
+                    ],
+                    "games_a": null,
+                    "games_b": null
+                },
+                {
+                    "quadra": 2,
+                    "dupla_a": [
+                        5,
+                        3
+                    ],
+                    "dupla_b": [
+                        4,
+                        6
+                    ],
+                    "games_a": null,
+                    "games_b": null
+                }
+            ]
+        },
+        {
+            "numero": 4,
+            "partidas": [
+                {
+                    "quadra": 1,
+                    "dupla_a": [
+                        5,
+                        3
+                    ],
+                    "dupla_b": [
+                        2,
+                        1
+                    ],
+                    "games_a": null,
+                    "games_b": null
+                },
+                {
+                    "quadra": 2,
+                    "dupla_a": [
+                        8,
+                        7
+                    ],
+                    "dupla_b": [
+                        4,
+                        6
+                    ],
+                    "games_a": null,
+                    "games_b": null
+                }
+            ]
+        },
+        {
+            "numero": 5,
+            "partidas": [
+                {
+                    "quadra": 1,
+                    "dupla_a": [
+                        4,
+                        6
+                    ],
+                    "dupla_b": [
+                        2,
+                        1
+                    ],
+                    "games_a": null,
+                    "games_b": null
+                },
+                {
+                    "quadra": 2,
+                    "dupla_a": [
+                        8,
+                        7
+                    ],
+                    "dupla_b": [
+                        5,
+                        3
+                    ],
+                    "games_a": null,
+                    "games_b": null
+                }
+            ]
+        },
+        {
+            "numero": 6,
+            "partidas": [
+                {
+                    "quadra": 1,
+                    "dupla_a": [
+                        8,
+                        7
+                    ],
+                    "dupla_b": [
+                        2,
+                        1
+                    ],
+                    "games_a": null,
+                    "games_b": null
+                },
+                {
+                    "quadra": 2,
+                    "dupla_a": [
+                        4,
+                        6
+                    ],
+                    "dupla_b": [
+                        5,
+                        3
+                    ],
+                    "games_a": null,
+                    "games_b": null
+                }
+            ]
+        },
+        {
+            "numero": 7,
+            "partidas": [
+                {
+                    "quadra": 1,
+                    "dupla_a": [
+                        2,
+                        1
+                    ],
+                    "dupla_b": [
+                        5,
+                        3
+                    ],
+                    "games_a": null,
+                    "games_b": null
+                },
+                {
+                    "quadra": 2,
+                    "dupla_a": [
+                        4,
+                        6
+                    ],
+                    "dupla_b": [
+                        8,
+                        7
+                    ],
+                    "games_a": null,
+                    "games_b": null
+                }
+            ]
+        }
+    ]
+}

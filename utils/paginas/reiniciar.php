@@ -1,8 +1,4 @@
 <?php
-/**
- * Página de confirmação do reinício do torneio (substitui o confirm() do JS).
- */
-
 if (estado_torneio() === 'sem_participantes') {
     redirecionar('inicio', erro: 'Não há torneio para reiniciar.');
 }

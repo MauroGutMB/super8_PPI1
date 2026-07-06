@@ -1,9 +1,4 @@
 <?php
-/**
- * Recebe o formato escolhido, monta as duplas (sorteadas ou manuais),
- * gera as 7 rodadas e grava data/rodadas.json.
- */
-
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     redirecionar('configuracao', erro: 'Envie o formulário de configuração.');
 }
@@ -13,7 +8,6 @@ if ($participantes === null) {
     redirecionar('configuracao', erro: 'Cadastre os 8 participantes antes de gerar as rodadas.');
 }
 
-// Regerar rodadas apaga os placares: exige a confirmação marcada no formulário.
 if (carregar_torneio() !== null && empty($_POST['confirmar_regerar'])) {
     redirecionar('configuracao', erro: 'Marque a confirmação para gerar novas rodadas (os placares lançados serão apagados).');
 }
@@ -45,7 +39,7 @@ if ($formato === 'rotativas') {
         }
 
         $nomes  = array_column($participantes, 'nome', 'id');
-        $vistos = []; // id do jogador => número da dupla em que já apareceu
+        $vistos = [];
         foreach ($duplas as $d => $par) {
             foreach ($par as $id) {
                 if (isset($vistos[$id])) {
@@ -60,7 +54,6 @@ if ($formato === 'rotativas') {
             }
         }
 
-        // Salvaguarda: só ids de participantes cadastrados
         $todos = array_merge(...$duplas);
         sort($todos);
         $esperado = $ids;

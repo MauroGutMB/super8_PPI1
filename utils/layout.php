@@ -1,18 +1,9 @@
 <?php
-/**
- * Cabeçalho e rodapé compartilhados por todas as páginas.
- * Como tudo é servido pelo index.php na raiz, os caminhos são sempre relativos a ela.
- */
-
 function e(?string $texto): string
 {
     return htmlspecialchars((string) $texto, ENT_QUOTES, 'UTF-8');
 }
 
-/**
- * @param int|null $refresh Se informado, a página recarrega sozinha a cada N segundos
- *                          (usado na classificação enquanto o torneio está em andamento).
- */
 function cabecalho(string $titulo, ?int $refresh = null): void
 {
     $links = [
@@ -65,7 +56,6 @@ function rodape(): void
     <?php
 }
 
-/** Caixa de mensagem vinda por query string (?ok=... ou ?erro=...). */
 function mensagens_flash(): void
 {
     if (!empty($_GET['ok'])) {

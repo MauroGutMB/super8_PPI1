@@ -1,13 +1,4 @@
 <?php
-/**
- * Ponto de entrada único do sistema (front controller).
- *
- *   Páginas: index.php?pagina=inicio|participantes|configuracao|rodadas|classificacao|reiniciar
- *   Ações:   index.php?acao=salvar_participantes|gerar_rodadas|salvar_placar|reiniciar (POST)
- *
- * As ações processam formulários e redirecionam; as páginas apenas exibem.
- */
-
 require_once __DIR__ . '/config/config.php';
 
 $acoes = [
