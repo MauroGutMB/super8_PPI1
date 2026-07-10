@@ -1,13 +1,15 @@
-# 🏖️ Sistema de Classificação Super 8 — Beach Tennis
+# Sistema de Classificação Super 8 — Beach Tennis
 
 Sistema web para organizar um torneio **Super 8** de beach tennis: 8 participantes
 (7 rodadas nas duplas rotativas, 3 nas duplas fixas), lançamento de placares e
 classificação em tempo real. Desenvolvido para a disciplina **Programação para
 Internet I**.
 
+**Link** https://www.youtube.com/watch?v=Xp6M8wRWIhE
+
 **Tecnologias:** PHP · HTML · CSS · JSON.
 
-## ▶️ Como rodar localmente
+## Como rodar localmente
 
 Requisito: **PHP 8+** instalado.
 
